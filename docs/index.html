@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TG WS Proxy для Android — Ускорение Telegram</title>
+  <meta name="description" content="Бесплатное приложение для Android, которое ускоряет загрузку видео, голосовых сообщений и каналов в Telegram. Простая установка за 1 минуту.">
+  <link rel="icon" type="image/png" href="docs/images/android.png">
+  <style>
+    :root {
+      --bg-dark: #0f141c;
+      --bg-card: #18222d;
+      --bg-card-hover: #1f2c3a;
+      --primary: #2481cc;
+      --primary-hover: #2996ee;
+      --text-main: #f5f7fa;
+      --text-muted: #8e99a8;
+      --accent-green: #31b545;
+      --border-color: rgba(255, 255, 255, 0.08);
+      --radius: 16px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      padding: 0 16px 60px;
+    }
+
+    .container {
+      max-width: 760px;
+      margin: 0 auto;
+    }
+
+    header {
+      padding: 40px 0 20px;
+      text-align: center;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 6px 14px;
+      background: rgba(36, 129, 204, 0.15);
+      color: #64b5f6;
+      border: 1px solid rgba(36, 129, 204, 0.3);
+      border-radius: 30px;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      letter-spacing: 0.3px;
+    }
+
+    h1 {
+      font-size: 32px;
+      font-weight: 800;
+      line-height: 1.25;
+      margin-bottom: 14px;
+      background: linear-gradient(135deg, #ffffff 40%, #90caf9 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    @media (min-width: 600px) {
+      h1 { font-size: 42px; }
+    }
+
+    .subtitle {
+      font-size: 17px;
+      color: var(--text-muted);
+      margin-bottom: 30px;
+      max-width: 580px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .cta-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      padding: 24px;
+      text-align: center;
+      margin-bottom: 40px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .btn-download {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+      max-width: 380px;
+      padding: 16px 28px;
+      background: linear-gradient(135deg, var(--primary) 0%, #1d72b8 100%);
+      color: #ffffff;
+      text-decoration: none;
+      font-size: 18px;
+      font-weight: 700;
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(36, 129, 204, 0.4);
+      transition: all 0.2s ease;
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn-download:hover {
+      background: linear-gradient(135deg, var(--primary-hover) 0%, #2080cf 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(36, 129, 204, 0.5);
+    }
+
+    .download-meta {
+      margin-top: 12px;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .download-meta a {
+      color: #64b5f6;
+      text-decoration: none;
+    }
+    .download-meta a:hover {
+      text-decoration: underline;
+    }
+
+    .preview-section {
+      text-align: center;
+      margin: 40px 0;
+    }
+
+    .app-screen {
+      width: 100%;
+      max-width: 320px;
+      border-radius: 24px;
+      border: 3px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+      transition: transform 0.3s ease;
+    }
+
+    .app-screen:hover {
+      transform: scale(1.02);
+    }
+
+    .section-title {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .steps-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-bottom: 44px;
+    }
+
+    .step-card {
+      display: flex;
+      gap: 18px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      padding: 20px;
+      align-items: flex-start;
+    }
+
+    .step-num {
+      flex-shrink: 0;
+      width: 38px;
+      height: 38px;
+      background: rgba(36, 129, 204, 0.2);
+      color: #64b5f6;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 16px;
+      border: 1px solid rgba(36, 129, 204, 0.4);
+    }
+
+    .step-content h3 {
+      font-size: 17px;
+      font-weight: 700;
+      margin-bottom: 4px;
+      color: #ffffff;
+    }
+
+    .step-content p {
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    .tip-box {
+      margin-top: 8px;
+      padding: 8px 12px;
+      background: rgba(255, 255, 255, 0.04);
+      border-left: 3px solid #64b5f6;
+      border-radius: 4px;
+      font-size: 12px;
+      color: #b0bec5;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+      margin-bottom: 44px;
+    }
+
+    @media (min-width: 560px) {
+      .features-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .feature-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      padding: 20px;
+    }
+
+    .feature-card .icon {
+      font-size: 28px;
+      margin-bottom: 10px;
+    }
+
+    .feature-card h4 {
+      font-size: 16px;
+      margin-bottom: 6px;
+      color: #ffffff;
+    }
+
+    .feature-card p {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .faq-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 50px;
+    }
+
+    .faq-item {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      padding: 18px 20px;
+    }
+
+    .faq-item h4 {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: #ffffff;
+    }
+
+    .faq-item p {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    footer {
+      text-align: center;
+      padding-top: 20px;
+      border-top: 1px solid var(--border-color);
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    footer a {
+      color: #64b5f6;
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    
+    <header>
+      <div class="badge">Бесплатно • Без рекламы • Открытый код</div>
+      <h1>TG WS Proxy для Android</h1>
+      <p class="subtitle">
+        Локальный прокси для вашего смартфона. Ускоряет загрузку видео, голосовых сообщений и каналов в Telegram в один клик.
+      </p>
+    </header>
+
+    <div class="cta-box">
+      <a href="https://github.com/nickstrlnkv/tg-ws-proxy-android/releases/latest/download/tg-ws-proxy-android.apk" id="downloadBtn" class="btn-download">
+        <span>📥 Скачать APK</span>
+      </a>
+      <div class="download-meta">
+        Для Android 8.0 и выше • Размер ~11.8 МБ • <a href="https://github.com/nickstrlnkv/tg-ws-proxy-android/releases" target="_blank">Все версии на GitHub</a>
+      </div>
+    </div>
+
+    <div class="preview-section">
+      <img src="docs/images/android.png" onerror="this.src='android.png'" alt="Интерфейс приложения TG WS Proxy" class="app-screen">
+    </div>
+
+    <h2 class="section-title">Как установить и включить</h2>
+    
+    <div class="steps-list">
+      
+      <div class="step-card">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <h3>Скачайте приложение</h3>
+          <p>Нажмите синюю кнопку «Скачать APK» в начале страницы. Файл загрузится в память вашего смартфона.</p>
+          <div class="tip-box">
+            💡 <b>Подсказка:</b> Если браузер напишет «Файл может быть опасным», нажмите «Всё равно скачать». Android всегда показывает это предупреждение для любых программ, загружаемых не из Google Play.
+          </div>
+        </div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <h3>Установите файл на телефон</h3>
+          <p>Откройте скачанный файл в шторке уведомлений или через папку «Загрузки» и нажмите «Установить».</p>
+          <div class="tip-box">
+            💡 <b>Подсказка:</b> Если телефон попросит разрешение на установку приложений из браузера — подтвердите его в настройках.
+          </div>
+        </div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <h3>Запустите прокси</h3>
+          <p>Откройте установленное приложение <b>TG WS Proxy</b> и нажмите переключатель <b>«Запустить прокси»</b>.</p>
+          <div class="tip-box">
+            💡 <b>Подсказка:</b> Разрешите отправку уведомлений — это нужно, чтобы приложение стабильно работало в фоне при выключенном экране.
+          </div>
+        </div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-num">4</div>
+        <div class="step-content">
+          <h3>Подключите в Telegram в один клик</h3>
+          <p>Нажмите большую кнопку <b>«Подключить в Telegram»</b>. У вас автоматически откроется Telegram с окном добавления прокси — нажмите <b>«Включить»</b>.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="cta-box" style="margin-bottom: 44px;">
+      <h3 style="font-size: 18px; margin-bottom: 8px;">🎉 Всё готово!</h3>
+      <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 16px;">
+        В правом верхнем углу Telegram появится значок щита со статусом «Подключено». Видео и кружочки будут открываться быстро.
+      </p>
+      <a href="https://github.com/nickstrlnkv/tg-ws-proxy-android/releases/latest/download/tg-ws-proxy-android.apk" class="btn-download" style="max-width: 320px; font-size: 16px; padding: 14px 20px;">
+        Скачать приложение
+      </a>
+    </div>
+
+    <h2 class="section-title">Почему это безопасно?</h2>
+
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="icon">🔒</div>
+        <h4>Сквозное шифрование</h4>
+        <p>Ваши переписки, фотографии и звонки зашифрованы ключами Telegram. Прокси работает как труба и физически не может прочитать ваши данные.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="icon">🛡</div>
+        <h4>Без паролей и номеров</h4>
+        <p>Приложение не требует регистрации, авторизации или ввода личных данных. Никаких аккаунтов.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="icon">🔋</div>
+        <h4>Экономия батареи</h4>
+        <p>Написано нативно на Kotlin. В фоновом режиме потребляет минимум энергии и оперативной памяти.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="icon">📖</div>
+        <h4>Открытый исходный код</h4>
+        <p>Код полностью открыт для проверки любым независимым разработчиком на GitHub.</p>
+      </div>
+    </div>
+
+    <h2 class="section-title">Частые вопросы</h2>
+
+    <div class="faq-list">
+      <div class="faq-item">
+        <h4>Нужно ли платить за использование?</h4>
+        <p>Нет, приложение полностью бесплатное, без подписок, ограничений по скорости и рекламы.</p>
+      </div>
+
+      <div class="faq-item">
+        <h4>Нужен ли отдельный VPN?</h4>
+        <p>Нет, TG WS Proxy работает автономно прямо на вашем смартфоне.</p>
+      </div>
+
+      <div class="faq-item">
+        <h4>Нужны ли Root-права?</h4>
+        <p>Нет, приложение работает на любых смартфонах с Android 8.0 и выше без необходимости рутирования.</p>
+      </div>
+
+      <div class="faq-item">
+        <h4>Что делать, если при выключении экрана связь пропадает?</h4>
+        <p>Зайдите в «Настройки» телефона → «Приложения» → «TG WS Proxy» → «Батарея» и установите режим «Без ограничений» (Не оптимизировать).</p>
+      </div>
+    </div>
+
+    <footer>
+      <p>Разработчик порта для Android: <a href="https://github.com/nickstrlnkv" target="_blank">@nickstrlnkv</a></p>
+      <p style="margin-top: 4px;">На основе проекта <a href="https://github.com/Flowseal/tg-ws-proxy" target="_blank">Flowseal/tg-ws-proxy</a> • Лицензия MIT</p>
+      <p style="margin-top: 10px;"><a href="https://github.com/nickstrlnkv/tg-ws-proxy-android" target="_blank">Репозиторий на GitHub</a></p>
+    </footer>
+
+  </div>
+
+  <script>
+    // Попытка динамически подставить самую последнюю версию из GitHub Releases
+    fetch('https://api.github.com/repos/nickstrlnkv/tg-ws-proxy-android/releases/latest')
+      .then(r => r.json())
+      .then(data => {
+        if (data && data.tag_name) {
+          const btn = document.getElementById('downloadBtn');
+          if (btn) {
+            btn.innerHTML = '<span>📥 Скачать APK (' + data.tag_name + ')</span>';
+          }
+        }
+      })
+      .catch(() => {});
+  </script>
+</body>
+</html>

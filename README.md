@@ -14,7 +14,7 @@
 <br />
 
 <p align="center">
-  <img src="docs/images/android-preview.png" alt="TG WS Proxy Android Screenshot" width="320" />
+  <img src="docs/images/android.png" alt="TG WS Proxy Android Screenshot" width="320" />
 </p>
 
 </div>
