@@ -25,3 +25,15 @@ Desktop.ini
 .DS_Store
 
 /icon.icns
+
+
+# Android
+.gradle/
+build/
+*/build/
+local.properties
+*.apk
+*.aab
+.navigation/
+captures/
+.cxx/
