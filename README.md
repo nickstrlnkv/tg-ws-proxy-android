@@ -9,13 +9,11 @@
 [![Kotlin](https://img.shields.io/badge/Kotlin-2.2.10-7F52FF.svg?style=flat&logo=kotlin)](https://kotlinlang.org/)
 [![Compose](https://img.shields.io/badge/Jetpack%20Compose-Material%203-4285F4.svg?style=flat&logo=jetpackcompose)](https://developer.android.com/jetpack/compose)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![GitHub Release](https://img.shields.io/github/v/release/nickstrlnkv/tg-ws-proxy-android?include_prereleases&color=blue)](https://github.com/nickstrlnkv/tg-ws-proxy-android/releases)
+[![Release](https://img.shields.io/badge/Release-v1.0.0-blue.svg)](https://github.com/nickstrlnkv/tg-ws-proxy-android/releases)
 
 <br />
 
-<p align="center">
-  <img src="docs/images/android.png" alt="TG WS Proxy Android Screenshot" width="320" />
-</p>
+![TG WS Proxy Android Screenshot](docs/images/android.png)
 
 </div>
 
