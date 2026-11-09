@@ -26,15 +26,35 @@ android {
             val keystoreFile = project.rootProject.file("release.keystore")
             if (keystoreFile.exists()) {
                 storeFile = keystoreFile
-                storePassword = System.getenv("KEYSTORE_PASSWORD") ?: "android"
-                keyAlias = System.getenv("KEY_ALIAS") ?: "androidreleasekey"
-                keyPassword = System.getenv("KEY_PASSWORD") ?: "android"
+                storePassword = System.getenv("KEYSTORE_PASSWORD")?.takeIf { it.isNotBlank() } ?: "android"
+                keyAlias = System.getenv("KEY_ALIAS")?.takeIf { it.isNotBlank() } ?: "androidreleasekey"
+                keyPassword = System.getenv("KEY_PASSWORD")?.takeIf { it.isNotBlank() } ?: "android"
             } else {
                 val debugKeystore = signingConfigs.getByName("debug")
-                storeFile = debugKeystore.storeFile
-                storePassword = debugKeystore.storePassword
-                keyAlias = debugKeystore.keyAlias
-                keyPassword = debugKeystore.keyPassword
+                val debugStoreFile = debugKeystore.storeFile
+                val homeDir = System.getProperty("user.home")
+                val legacyDebugKeystore = file("$homeDir/.android/debug.keystore")
+                val xdgDebugKeystore = file("$homeDir/.config/.android/debug.keystore")
+                when {
+                    debugStoreFile != null && debugStoreFile.exists() -> {
+                        storeFile = debugStoreFile
+                        storePassword = debugKeystore.storePassword
+                        keyAlias = debugKeystore.keyAlias
+                        keyPassword = debugKeystore.keyPassword
+                    }
+                    xdgDebugKeystore.exists() -> {
+                        storeFile = xdgDebugKeystore
+                        storePassword = "android"
+                        keyAlias = "androiddebugkey"
+                        keyPassword = "android"
+                    }
+                    legacyDebugKeystore.exists() -> {
+                        storeFile = legacyDebugKeystore
+                        storePassword = "android"
+                        keyAlias = "androiddebugkey"
+                        keyPassword = "android"
+                    }
+                }
             }
         }
     }
@@ -46,7 +66,10 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            signingConfig = signingConfigs.getByName("release")
+            val releaseSigning = signingConfigs.getByName("release")
+            if (releaseSigning.storeFile?.exists() == true) {
+                signingConfig = releaseSigning
+            }
         }
     }
     compileOptions {

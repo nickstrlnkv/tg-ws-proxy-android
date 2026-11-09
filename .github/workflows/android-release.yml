@@ -36,16 +36,27 @@ jobs:
       - name: Setup Keystore
         env:
           KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
         run: |
           if [ -n "$KEYSTORE_BASE64" ]; then
             echo "Decoding provided release keystore from secrets..."
             echo "$KEYSTORE_BASE64" | base64 --decode > android/release.keystore
           else
-            echo "No custom keystore provided in secrets. Ensuring fallback debug keystore exists..."
-            mkdir -p ~/.android
-            if [ ! -f ~/.android/debug.keystore ]; then
-              keytool -genkey -v -keystore ~/.android/debug.keystore -alias androiddebugkey -storepass android -keypass android -keyalg RSA -keysize 2048 -validity 10000 -dname "CN=Android Debug,O=Android,C=US"
-            fi
+            echo "No custom keystore provided in secrets. Generating self-signed release keystore..."
+            STORE_PASS="${KEYSTORE_PASSWORD:-android}"
+            ALIAS="${KEY_ALIAS:-androidreleasekey}"
+            KEY_PASS="${KEY_PASSWORD:-android}"
+            keytool -genkeypair -v \
+              -keystore android/release.keystore \
+              -alias "$ALIAS" \
+              -keyalg RSA \
+              -keysize 2048 \
+              -validity 10000 \
+              -storepass "$STORE_PASS" \
+              -keypass "$KEY_PASS" \
+              -dname "CN=Android Release,O=Android,C=US"
           fi
 
       - name: Build Release APK
@@ -66,14 +77,18 @@ jobs:
             VERSION="v1.0.0"
           fi
           echo "Release version: $VERSION"
-          cp android/app/build/outputs/apk/release/app-release.apk "tg-ws-proxy-android-${VERSION}.apk"
-          cp android/app/build/outputs/apk/release/app-release.apk "tg-ws-proxy-android.apk"
+          APK_PATH="android/app/build/outputs/apk/release/app-release.apk"
+          if [ ! -f "$APK_PATH" ]; then
+            APK_PATH="android/app/build/outputs/apk/release/app-release-unsigned.apk"
+          fi
+          cp "$APK_PATH" "tg-ws-proxy-android-${VERSION}.apk"
+          cp "$APK_PATH" "tg-ws-proxy-android.apk"
 
       - name: Upload Artifact to GitHub Actions
         uses: actions/upload-artifact@v4
         with:
           name: tg-ws-proxy-apk
-          path: android/app/build/outputs/apk/release/app-release.apk
+          path: tg-ws-proxy-android.apk
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
