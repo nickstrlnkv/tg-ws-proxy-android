@@ -23,8 +23,10 @@ android {
 
     signingConfigs {
         create("release") {
-            val keystoreFile = project.rootProject.file("release.keystore")
-            if (keystoreFile.exists()) {
+            val keystoreFile = project.rootProject.file("release.keystore").takeIf { it.exists() }
+                ?: project.file("release.keystore").takeIf { it.exists() }
+                ?: file("release.keystore").takeIf { it.exists() }
+            if (keystoreFile != null) {
                 storeFile = keystoreFile
                 storePassword = System.getenv("KEYSTORE_PASSWORD")?.takeIf { it.isNotBlank() } ?: "android"
                 keyAlias = System.getenv("KEY_ALIAS")?.takeIf { it.isNotBlank() } ?: "androidreleasekey"
